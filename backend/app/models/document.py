@@ -3,9 +3,9 @@
 Modèle pour les documents téléchargés
 """
 
-from sqlalchemy import Column, Integer, String, DateTime, LargeBinary, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, LargeBinary, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from app.models.base import Base
 
@@ -44,5 +44,4 @@ class Document(Base):
     
     def calculate_deletion_date(self, retention_days: int = 30):
         """Calculer la date de suppression automatique"""
-        from datetime import timedelta
         self.deletion_date = datetime.utcnow() + timedelta(days=retention_days)

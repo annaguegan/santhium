@@ -1,0 +1,187 @@
+/* frontend/src/styles/DocumentList.css */
+
+.loading-container {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 16px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  color: #718096;
+  font-size: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #718096;
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.document-list {
+  overflow-x: auto;
+}
+
+.documents-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.documents-table thead {
+  background-color: #f7fafc;
+}
+
+.documents-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.documents-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 0.2s ease;
+}
+
+.documents-table tbody tr:hover {
+  background-color: #f7fafc;
+}
+
+.documents-table tbody tr.new {
+  background-color: #ebf8ff;
+}
+
+.documents-table tbody tr.new:hover {
+  background-color: #bee3f8;
+}
+
+.documents-table td {
+  padding: 16px;
+  color: #2d3748;
+  font-size: 14px;
+}
+
+.filename-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.file-icon {
+  font-size: 24px;
+}
+
+.filename {
+  font-weight: 500;
+  color: #1a202c;
+}
+
+.badge-new {
+  background-color: #667eea;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.unread {
+  background-color: #bee3f8;
+  color: #2c5282;
+}
+
+.status-badge.viewed {
+  background-color: #c6f6d5;
+  color: #22543d;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-download {
+  background-color: #ebf8ff;
+  color: #2c5282;
+}
+
+.btn-download:hover {
+  background-color: #bee3f8;
+}
+
+.btn-delete {
+  background-color: #fed7d7;
+  color: #c53030;
+}
+
+.btn-delete:hover {
+  background-color: #feb2b2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .documents-table {
+    font-size: 12px;
+  }
+
+  .documents-table th,
+  .documents-table td {
+    padding: 8px;
+  }
+
+  .filename {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
