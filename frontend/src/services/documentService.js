@@ -1,6 +1,8 @@
 // Gestion des documents
 import api from './api';
 
+const DOCUMENT_BASE = '/api/documents';
+
 export const documentService = {
   // Upload d'un document par un patient
   upload: async (code, file) => {
@@ -8,7 +10,7 @@ export const documentService = {
     formData.append('file', file);
     formData.append('code', code);
 
-    return await api.post('/documents/upload', formData, {
+    return await api.post(`${DOCUMENT_BASE}/upload`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -17,13 +19,13 @@ export const documentService = {
 
   // Récupérer tous les documents (pharmacien)
   getAll: async () => {
-    const response = await api.get('/documents');
+    const response = await api.get(DOCUMENT_BASE);
     return response.data;
   },
 
   // Télécharger un document
   download: async (documentId) => {
-    const response = await api.get(`/documents/${documentId}/download`, {
+    const response = await api.get(`${DOCUMENT_BASE}/${documentId}/download`, {
       responseType: 'blob',
     });
     return response.data;
@@ -31,6 +33,6 @@ export const documentService = {
 
   // Supprimer un document
   delete: async (documentId) => {
-    return await api.delete(`/documents/${documentId}`);
+    return await api.delete(`${DOCUMENT_BASE}/${documentId}`);
   },
 };

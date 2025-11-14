@@ -15,7 +15,10 @@ export const CODE_LENGTH = 6;
 export const ROUTES = {
   HOME: '/',
   PHARMACY_LOGIN: '/pharmacy/login',
+  PHARMACY_SIGNUP: '/pharmacy/signup',
+  PHARMACY_CREATE: '/pharmacy/create',
   PHARMACY_DASHBOARD: '/pharmacy/dashboard',
+  PATIENT_UPLOAD_BASE: '/patient/upload',
   PATIENT_UPLOAD: '/patient/upload/:code',
   ABOUT: '/about',
 };

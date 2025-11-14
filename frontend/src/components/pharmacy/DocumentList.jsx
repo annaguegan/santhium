@@ -2,9 +2,13 @@
 import React from 'react';
 import { documentService } from '../../services/documentService';
 import { formatters } from '../../utils/formatters';
+import { useNotification } from '../../contexts/NotificationContext';
+import { LuFileText, LuDownload, LuTrash2 } from 'react-icons/lu';
 import '../../styles/DocumentList.css';
 
 export const DocumentList = ({ documents, onRefresh, loading }) => {
+  const { notify } = useNotification();
+
   const handleDownload = async (documentId, filename) => {
     try {
       const blob = await documentService.download(documentId);
@@ -18,7 +22,7 @@ export const DocumentList = ({ documents, onRefresh, loading }) => {
       document.body.removeChild(a);
     } catch (error) {
       console.error('Erreur lors du téléchargement:', error);
-      alert('Erreur lors du téléchargement du document');
+      notify('Erreur lors du téléchargement du document', 'error');
     }
   };
 
@@ -29,11 +33,11 @@ export const DocumentList = ({ documents, onRefresh, loading }) => {
 
     try {
       await documentService.delete(documentId);
-      alert('Document supprimé avec succès');
+      notify('Document supprimé avec succès', 'success');
       onRefresh();
     } catch (error) {
       console.error('Erreur lors de la suppression:', error);
-      alert('Erreur lors de la suppression du document');
+      notify('Erreur lors de la suppression du document', 'error');
     }
   };
 
@@ -74,7 +78,7 @@ export const DocumentList = ({ documents, onRefresh, loading }) => {
             <tr key={doc.id} className={doc.is_viewed ? 'viewed' : 'new'}>
               <td>
                 <div className="filename-cell">
-                  <span className="file-icon">📄</span>
+                  <LuFileText className="file-icon" size={20} />
                   <span className="filename">{doc.original_filename}</span>
                   {!doc.is_viewed && <span className="badge-new">Nouveau</span>}
                 </div>
@@ -93,14 +97,14 @@ export const DocumentList = ({ documents, onRefresh, loading }) => {
                     className="btn-icon btn-download"
                     title="Télécharger"
                   >
-                    ⬇️
+                    <LuDownload size={18} />
                   </button>
                   <button
                     onClick={() => handleDelete(doc.id)}
                     className="btn-icon btn-delete"
                     title="Supprimer"
                   >
-                    🗑️
+                    <LuTrash2 size={18} />
                   </button>
                 </div>
               </td>

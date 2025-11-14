@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_DB: santhium_db
       POSTGRES_USER: santhium_user
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme_in_production}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-santhium_password}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -32,11 +32,19 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      ENVIRONMENT: ${ENVIRONMENT}
     volumes:
       - ./backend:/app
       - backend_uploads:/app/uploads
     ports:
       - "8000:8000"
+    command: ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     networks:
       - santhium-network
     healthcheck:
@@ -45,22 +53,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    environment:
-      DATABASE_URL: postgresql://santhium_user:changeme_in_production@postgres:5432/santhium_db
-      SECRET_KEY: dev-secret-key
-      ENCRYPTION_KEY: wGCF2jInFkalZWYLlQ4iXbGbMFTcLzZQ2GMwcZdhP4o=
-      ALGORITHM: HS256
-      ACCESS_TOKEN_EXPIRE_MINUTES: 30
-      CORS_ORIGINS: http://localhost:3000,http://localhost:80,http://localhost
-      MAX_FILE_SIZE_MB: 10
-      ALLOWED_EXTENSIONS: pdf,jpg,jpeg,png
-      UPLOAD_FOLDER: /app/uploads
-      DATA_RETENTION_DAYS: 30
-      AUTO_DELETE_ENABLED: true
-      CODE_EXPIRATION_HOURS: 24
-      RATE_LIMIT_PER_MINUTE: 60
-      ENVIRONMENT: development
-      DEBUG: True
 
   # Frontend React
   frontend:
@@ -101,6 +93,27 @@ services:
       timeout: 5s
       retries: 5
 
+  frontend-dev:
+    profiles: ["dev"]
+    image: node:18-alpine
+    container_name: santhium-frontend-dev
+    working_dir: /app
+    environment:
+      REACT_APP_API_URL: http://localhost:8000
+      CHOKIDAR_USEPOLLING: "true"
+      WDS_SOCKET_PORT: 0
+      BROWSER: none
+    command: sh -c "npm install && npm start"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - santhium-network
+
 networks:
   santhium-network:
     driver: bridge
@@ -111,4 +124,6 @@ volumes:
   backend_uploads:
     driver: local
   redis_data:
+    driver: local
+  frontend_node_modules:
     driver: local

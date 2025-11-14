@@ -62,10 +62,11 @@ frontend/src/
 │   ├── constants.js     # Constantes de l'app
 │   └── helpers.js       # Fonctions helper diverses
 │
-├── styles/               # Styles CSS/SCSS
-│   ├── variables.css    # Variables CSS (couleurs, etc.)
-│   ├── global.css       # Styles globaux
-│   └── components.css   # Styles des composants
+├── styles/               # Styles CSS/SCSS (1 fichier par page/composant)
+│   ├── Login.css
+│   ├── Dashboard.css
+│   ├── PatientUpload.css
+│   └── (autres fichiers spécifiques)
 │
 ├── assets/               # Ressources statiques
 │   ├── images/          # Images, logos

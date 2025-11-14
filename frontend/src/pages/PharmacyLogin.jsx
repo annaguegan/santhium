@@ -1,6 +1,6 @@
 // frontend/src/pages/PharmacyLogin.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 import '../styles/Login.css';
 
@@ -92,6 +92,15 @@ const PharmacyLogin = () => {
 
         <div className="login-footer">
           <p>Plateforme sécurisée de transfert de documents médicaux</p>
+        </div>
+
+        <div className="auth-switch">
+          <span>Pas encore de compte ? </span>
+          <Link to="/pharmacy/signup">Créer un compte pharmacien</Link>
+        </div>
+        <div className="auth-switch">
+          <span>Nouvelle pharmacie ? </span>
+          <Link to="/pharmacy/create">Créer ma pharmacie</Link>
         </div>
       </div>
     </div>

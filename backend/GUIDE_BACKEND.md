@@ -188,7 +188,7 @@ class Settings(BaseSettings):
     # RGPD/HDS
     DATA_RETENTION_DAYS: int = 30
     AUTO_DELETE_ENABLED: bool = True
-    CODE_EXPIRATION_HOURS: int = 24
+    CODE_EXPIRATION_HOURS: int = 1
     
     # Rate limiting
     RATE_LIMIT_PER_MINUTE: int = 60

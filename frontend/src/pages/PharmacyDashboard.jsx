@@ -1,16 +1,20 @@
 // frontend/src/pages/PharmacyDashboard.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CodeGenerator } from '../components/pharmacy/CodeGenerator';
 import { DocumentList } from '../components/pharmacy/DocumentList';
 import { documentService } from '../services/documentService';
 import { authService } from '../services/authService';
+import { profileService } from '../services/profileService';
+import { LuCircleUser } from 'react-icons/lu';
 import '../styles/Dashboard.css';
 
 const PharmacyDashboard = () => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const profileRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,8 +24,8 @@ const PharmacyDashboard = () => {
       navigate('/pharmacy/login');
       return;
     }
-    setUser(currentUser);
     loadDocuments();
+    loadProfile();
   }, [navigate]);
 
   const loadDocuments = async () => {
@@ -36,10 +40,36 @@ const PharmacyDashboard = () => {
     }
   };
 
+  const loadProfile = async () => {
+    try {
+      const data = await profileService.getProfile();
+      setProfile(data);
+    } catch (error) {
+      console.error('Erreur lors du chargement du profil:', error);
+    }
+  };
+
   const handleLogout = () => {
     authService.logout();
     navigate('/pharmacy/login');
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowProfile(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleProfile = () => {
+    setShowProfile((prev) => !prev);
+  };
+
+  const displayName = profile?.full_name?.trim() || profile?.email || 'Pharmacien';
 
   return (
     <div className="dashboard-container">
@@ -56,8 +86,49 @@ const PharmacyDashboard = () => {
             </svg>
             <h1>Santhium</h1>
           </div>
-          <div className="user-section">
-            <span className="user-name">{user?.email}</span>
+          <div className="user-section" ref={profileRef}>
+            <div className="user-profile">
+              <button 
+                className={`profile-button ${showProfile ? 'active' : ''}`}
+                onClick={toggleProfile}
+                type="button"
+                title="Voir mon profil"
+              >
+                <LuCircleUser size={24} />
+              </button>
+              <span className="user-name">{displayName}</span>
+              {showProfile && profile && (
+                <div className="profile-dropdown">
+                  <h3>{profile.pharmacy?.name || 'Pharmacie'}</h3>
+                  <div className="profile-row">
+                    <span>Code pharmacie</span>
+                    <strong>{profile.pharmacy?.tenant_code || '—'}</strong>
+                  </div>
+                  <div className="profile-row">
+                    <span>Compte connecté</span>
+                    <strong>{profile.email}</strong>
+                  </div>
+                  {profile.pharmacy?.city && (
+                    <div className="profile-row">
+                      <span>Ville</span>
+                      <strong>{profile.pharmacy.city}</strong>
+                    </div>
+                  )}
+                  {profile.pharmacy?.address && (
+                    <div className="profile-row">
+                      <span>Adresse</span>
+                      <strong>{profile.pharmacy.address}</strong>
+                    </div>
+                  )}
+                  {profile.pharmacy?.phone && (
+                    <div className="profile-row">
+                      <span>Téléphone</span>
+                      <strong>{profile.pharmacy.phone}</strong>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
             <button onClick={handleLogout} className="btn-logout">
               Déconnexion
             </button>

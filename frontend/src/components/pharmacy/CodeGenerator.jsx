@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { codeService } from '../../services/codeService';
 import { QRCodeSVG } from 'qrcode.react';
+import { useNotification } from '../../contexts/NotificationContext';
+import { LuCopy, LuTriangleAlert, LuTimer } from 'react-icons/lu';
 import '../../styles/CodeGenerator.css';
 
 export const CodeGenerator = () => {
@@ -9,6 +11,7 @@ export const CodeGenerator = () => {
   const [qrData, setQrData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { notify } = useNotification();
 
   const generateCode = async () => {
     setLoading(true);
@@ -29,7 +32,7 @@ export const CodeGenerator = () => {
 
   const copyCode = () => {
     navigator.clipboard.writeText(code);
-    alert('Code copié dans le presse-papier !');
+    notify('Code copié dans le presse-papier !', 'success');
   };
 
   return (
@@ -39,12 +42,13 @@ export const CodeGenerator = () => {
         className="btn-generate"
         disabled={loading}
       >
-        {loading ? 'Génération...' : '🔄 Générer un nouveau code'}
+        {loading ? 'Génération...' : 'Générer un nouveau code'}
       </button>
 
       {error && (
         <div className="error-box">
-          ⚠️ {error}
+          <LuTriangleAlert className="error-icon" size={18} />
+          <span>{error}</span>
         </div>
       )}
 
@@ -59,7 +63,7 @@ export const CodeGenerator = () => {
                 className="btn-copy"
                 title="Copier le code"
               >
-                📋
+                <LuCopy size={18} />
               </button>
             </div>
             <p className="code-hint">
@@ -80,7 +84,8 @@ export const CodeGenerator = () => {
           )}
 
           <div className="code-expires">
-            ⏱️ Ce code expire dans 24 heures
+            <LuTimer size={18} />
+            <span>Ce code expire dans 1 heure</span>
           </div>
         </div>
       )}

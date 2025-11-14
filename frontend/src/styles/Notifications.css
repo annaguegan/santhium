@@ -1,0 +1,48 @@
+.notification-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.notification {
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-weight: 600;
+  color: #0f172a;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
+  border-left: 4px solid transparent;
+  background: #ffffff;
+  animation: toast-enter 0.25s ease-out;
+  pointer-events: auto;
+}
+
+.notification-success {
+  border-left-color: #16a34a;
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #14532d;
+}
+
+.notification-error {
+  border-left-color: #dc2626;
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #7f1d1d;
+}
+
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

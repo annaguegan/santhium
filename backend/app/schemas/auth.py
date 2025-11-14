@@ -3,9 +3,12 @@
 Schémas Pydantic pour l'authentification
 """
 
+from __future__ import annotations
+
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
+from app.schemas.pharmacy import PharmacyInfo
 
 class LoginRequest(BaseModel):
     """Schéma pour la requête de connexion"""
@@ -13,11 +16,10 @@ class LoginRequest(BaseModel):
     password: str
 
 
-class TokenResponse(BaseModel):
-    """Schéma pour la réponse token"""
-    access_token: str
-    token_type: str = "bearer"
-    user: "UserResponse"
+class RegisterRequest(LoginRequest):
+    """Schéma pour la requête d'inscription"""
+    full_name: str
+    pharmacy_code: str
 
 
 class UserResponse(BaseModel):
@@ -29,3 +31,14 @@ class UserResponse(BaseModel):
     
     class Config:
         from_attributes = True
+
+
+class TokenResponse(BaseModel):
+    """Schéma pour la réponse token"""
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse
+
+
+class UserProfileResponse(UserResponse):
+    pharmacy: Optional[PharmacyInfo]

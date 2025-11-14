@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.core.config import settings
-from app.api.v1.router import api_router
+from app.api.router import api_router
 from app.db.session import engine
 from app.models import Base
 
@@ -41,7 +41,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Inclusion des routes
+# Inclusion des routes (supporte /api et /api/v1 pour compatibilité)
+app.include_router(api_router, prefix="/api")
 app.include_router(api_router, prefix="/api/v1")
 
 
