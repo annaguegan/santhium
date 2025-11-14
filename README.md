@@ -8,7 +8,7 @@ Plateforme sécurisée de transfert de documents médicaux pour les pharmacies.
 
 Santhium est une solution simple et sécurisée pour la transmission de documents sensibles dans le secteur de la santé. La plateforme permet aux pharmacies de recevoir des ordonnances et documents médicaux de manière conforme RGPD/HDS.
 
-**Documentation complète** : Consultez notre [Wiki](adresse_du_wiki) pour plus de détails.
+**Documentation complète** : Consultez https://deepwiki.com/annaguegan/santhium pour plus de détails.
 
 ---
 
@@ -248,7 +248,7 @@ npm start
 ## 📚 Documentation
 
 Pour plus d'informations, consultez :
-- **Wiki du projet** : [adresse_du_wiki](adresse_du_wiki)
+- **Wiki du projet** : https://deepwiki.com/annaguegan/santhium
 - **Documentation API** : http://localhost:8000/docs (une fois l'application lancée)
 
 
@@ -265,5 +265,5 @@ En cas de problème :
 1. Vérifiez que Docker est bien lancé
 2. Consultez les logs : `docker-compose logs -f`
 3. Vérifiez le fichier `.env`
-4. Consultez le [Wiki](adresse_du_wiki)
+4. Consultez le wiki : https://deepwiki.com/annaguegan/santhium
 5. Contactez l'équipe projet
