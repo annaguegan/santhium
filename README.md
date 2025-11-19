@@ -27,9 +27,17 @@ Santhium est une solution simple et sécurisée pour la transmission de document
 - **Nginx** (serveur web en production)
 
 ### Infrastructure & DevOps
-- **Docker** & **Docker Compose**
-- **Redis** (cache et sessions)
+- **Docker** & **Docker Compose** (3 services : frontend, backend, PostgreSQL)
 - **GitHub Actions** (CI/CD)
+
+### Architecture Docker
+- `frontend` : image multi-stage React + Nginx, exposée sur `http://localhost`, proxy `/api/*` vers le backend via le réseau privé `frontend_net`.
+- `backend` : image FastAPI (Uvicorn) connectée aux réseaux `frontend_net` et `backend_net`, port `8000` conservé pour le debug local.
+- `postgres` : base de données PostgreSQL isolée dans `backend_net`, non exposée à l'extérieur.
+
+Deux réseaux bridge séparent la surface d'exposition :
+- `frontend_net` : communication entre l'UI et l'API.
+- `backend_net` : communication privée entre l'API et PostgreSQL.
 
 ### Sécurité
 - HTTPS/TLS
@@ -70,14 +78,15 @@ ENCRYPTION_KEY=votre_cle_de_chiffrement
 
 ### 3. Lancer l'application avec Docker
 
-**Démarrer tous les services :**
+**Construire et demarrer les 3 services :**
 ```bash
-docker-compose up -d
+docker compose up -d --build
 ```
 
-L'application sera accessible à :
+L'application sera accessible a :
 - **Frontend** : http://localhost
-- **Backend API** : http://localhost:8000
+- **API via reverse proxy** : http://localhost/api
+- **API directe (debug)** : http://localhost:8000
 - **Documentation API** : http://localhost:8000/docs
 
 ---
@@ -88,48 +97,48 @@ L'application sera accessible à :
 
 ```bash
 # Démarrer les conteneurs en arrière-plan
-docker-compose up -d
+docker compose up -d
 
 # Voir les logs en temps réel
-docker-compose logs -f
+docker compose logs -f
 
 # Voir les logs d'un service spécifique
-docker-compose logs -f backend
-docker-compose logs -f frontend
+docker compose logs -f backend
+docker compose logs -f frontend
 
 # Arrêter les conteneurs
-docker-compose down
+docker compose down
 
 # Arrêter et supprimer les volumes (⚠️ supprime les données)
-docker-compose down -v
+docker compose down -v
 ```
 
 ### Rebuild et mise à jour
 
 ```bash
 # Rebuild après modification du code
-docker-compose up -d --build
+docker compose up -d --build
 
 # Rebuild un service spécifique
-docker-compose up -d --build backend
+docker compose up -d --build backend
 
 # Rebuild complet (force la reconstruction)
-docker-compose build --no-cache
-docker-compose up -d
+docker compose build --no-cache
+docker compose up -d
 ```
 
 ### Commandes utiles
 
 ```bash
 # Voir l'état des conteneurs
-docker-compose ps
+docker compose ps
 
 # Accéder au shell d'un conteneur
-docker-compose exec backend bash
-docker-compose exec frontend sh
+docker compose exec backend bash
+docker compose exec frontend sh
 
 # Redémarrer un service
-docker-compose restart backend
+docker compose restart backend
 
 # Voir les ressources utilisées
 docker stats
@@ -263,7 +272,7 @@ Projet réalisé dans le cadre de la formation ENSIBS 5A - Groupe 07
 
 En cas de problème :
 1. Vérifiez que Docker est bien lancé
-2. Consultez les logs : `docker-compose logs -f`
+2. Consultez les logs : `docker compose logs -f`
 3. Vérifiez le fichier `.env`
 4. Consultez le wiki : https://deepwiki.com/annaguegan/santhium
 5. Contactez l'équipe projet
