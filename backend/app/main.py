@@ -30,6 +30,11 @@ app = FastAPI(
     description="API sécurisée pour le transfert de documents médicaux",
     version="1.0.0",
     lifespan=lifespan,
+    # Indique que l'appli est servie derrière un préfixe /api (proxy Nginx)
+    root_path="/api",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
 )
 
 # Configuration CORS
@@ -52,7 +57,7 @@ async def root():
     return {
         "message": "Bienvenue sur l'API Santhium",
         "version": "1.0.0",
-        "documentation": "/docs"
+        "documentation": "/api/docs"
     }
 
 

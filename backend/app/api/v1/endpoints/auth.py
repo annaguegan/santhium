@@ -17,13 +17,13 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/login", response_model=TokenResponse)
 async def login(
-    login_data: LoginRequest,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
     """
-    Connexion d'un pharmacien
+    Connexion d'un pharmacien (compatible formulaire OAuth2 Password Flow)
     
-    - **email**: Email du pharmacien
+    - **username**: email du pharmacien
     - **password**: Mot de passe
     
     Returns:
@@ -33,11 +33,11 @@ async def login(
     
     try:
         result = auth_service.authenticate(
-            email=login_data.email,
-            password=login_data.password
+            email=form_data.username,
+            password=form_data.password
         )
         return result
-    except Exception as e:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email ou mot de passe incorrect"

@@ -13,7 +13,8 @@ from app.core.config import settings
 from app.models.user import User
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/login")
+# Indique le point d'obtention du token pour Swagger / OAuth2 password flow
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 
 def get_db():
